@@ -1,0 +1,15 @@
+---
+ripser_version: "1.0.1"
+ripser_src_archive: "v{{ ripser_version }}.tar.gz"
+ripser_url: "https://github.com/Ripser/ripser/archive/{{ ripser_src_archive }}"
+# need to specify!
+
+ripser_code_folder: "{{ ansible_env.HOME }}"
+ripser_src: "ripser-{{ ripser_version }}"
+ripser_topdir: "{{ ripser_code_folder }}/{{ripser_src}}"
+
+ripser_executables:
+  - name: ripser
+    folder: "{{ ripser_topdir }}"
+
+root_user: root

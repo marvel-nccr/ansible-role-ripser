@@ -1,0 +1,60 @@
+---
+# Will only download once
+- name: Get ripser source
+  get_url:
+    url: "{{ ripser_url }}"
+    dest: "{{ ripser_code_folder }}/{{  ripser_src_archive }}"
+    # for some reason, server takes ~10s to respond when queried from OS
+    timeout: 30
+  register: ripser_download
+
+- name: Extract ripser source
+  unarchive:
+    src: "{{ ripser_download.dest }}"
+    dest: "{{ ripser_code_folder }}"
+    remote_src: true
+
+- name: "Install prerequisites"
+  become: true
+  become_user: "{{ root_user }}"
+  apt:
+    name:
+      - build-essential
+      - gcc
+
+- name: "Make ripser executables"
+  command: "make"
+  args:
+    chdir: "{{ ripser_topdir }}"
+    creates: "{{ ripser_topdir }}/ripser"
+  register: ripser_make
+
+- name: "Run ripser example"
+  shell: "./ripser examples/sphere_3_192.lower_distance_matrix > example.out"
+  args:
+    chdir: "{{ ripser_topdir }}"
+    creates: "{{ ripser_topdir }}/example.out"
+  when: run_tests is defined and run_tests
+
+- name: "Put a line in ~/.profile to add ripser to the path"
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.profile"
+    line: "export PATH=${PATH}:{{ ripser_topdir }}"
+
+- include_role:
+    name: release_notes
+  vars:
+    section: "ripser"
+    option: "version"
+    value: "{{ ripser_version }}"
+  when: release_notes is defined and release_notes
+
+- include_role:
+    name: release_notes
+  vars:
+    section: "ripser"
+    option: "usage"
+    value: >-
+        ripser is installed in {{ ripser_topdir }}.
+        The 'ripser' executable has been added to the PATH
+  when: release_notes is defined and release_notes

@@ -1,0 +1,19 @@
+---
+allow_duplicates: false
+
+galaxy_info:
+  role_name: ripser
+  author: "MARVEL NCCR"
+  # yamllint disable-line rule:line-length
+  description: "An Ansible role that installs [Ripser](https://github.com/Ripser/ripserer)r) on Ubuntu."
+  license: MIT
+  min_ansible_version: 2.7
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+  galaxy_tags:
+    - ubuntu
+    - application
+    - science
