@@ -2,7 +2,7 @@
 
 # Ansible Role: marvel-nccr.ripser
 
-An Ansible role that installs [Ripser](https://github.com/Ripser/ripserer)r) on Ubuntu.
+An Ansible role that installs [Ripser](https://github.com/Ripser/ripser) on Ubuntu.
 
 ## Installation
 
